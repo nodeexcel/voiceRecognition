@@ -368,7 +368,24 @@ class VoiceRecognizer extends events {
 		this.emit("vc:detected", rJSON.AudioPosition );
 	}
 
+	/**
+	 * @method	_recognized
+	 * 
+	 * Receive the recognized text event sent by the recognition engine.
+	 * 
+	 * @param	{string}	result		Event result in JSON
+	 * @returns	{void}
+	 */
+	_recognized( result )
+	{
+		let response = this._construct_result( result );
 
+		this.emit("vc:recognized", response );
+
+		if( this.sameThread && this.continuos && !this._stoped ) {
+			this.listen();
+		}
+	}
 
 	/**
 	 * @method	_hypothesized
