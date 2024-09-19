@@ -123,6 +123,159 @@ class VoiceRecognizer extends events {
 		addon.add_grammar_XML( file, name );
 	}
 
+	/** TODO: This function is yet to be implemented.
+	 * @method	add_grammar
+	 * 
+	 * Add programmatic grammar to the speech recognition program.
+	 * 
+	 * @param 	{object} 	grammar 		Object with the grammar we want to add.
+	 * @returns	{void}
+	 */
+	add_grammar( grammar = null ) 
+	{
+		// Detenemos si no se ha construido el addon
+
+		if( !this._isConstructed ) {
+			console.error( "[voice-recognition]: Addon is not instantiated" )
+			return;
+		}
+		console.warn( "[voice-recognition]: Esta función aun no está implementada." )
+
+		// TODO: Hacer lo que sea.
+
+		//this.recognizer.add_grammar();
+	}
+
+	/** TODO: This function is yet to be implemented.
+	 * @method	rem_grammar
+	 * 
+	 * Remove a grammar from the recognizer.
+	 * 
+	 * @param 	{???} 		grammar 		The grammar we want to remove from the object.
+	 * @returns	{void}
+	 */
+	rem_grammar( grammar ) 
+	{
+		// Detenemos si no se ha construido el addon
+
+		if( !this._isConstructed ) {
+			console.error( "[voice-recognition]: Addon is not instantiated" )
+			return;
+		}
+		console.warn( "[voice-recognition]: Esta función aun no está implementada." )
+		return;
+	}
+
+	/**
+	 * @method	stop
+	 *
+	 * Stop speech recognition.
+	 *
+	 * @returns	{void}
+	 */
+	stop() 
+	{
+		// Detenemos si no se ha construido el addon
+
+		if( !this._isConstructed ) {
+			console.error( "[voice-recognition]: Addon is not instantiated" )
+			return;
+		}
+
+		if( this.sameThread ) {
+			this._stoped = true;
+		} else {
+			if( this._worker ) {
+				this._worker.terminate().
+					then(() => {
+						this._worker = null;
+						
+					});
+			}
+		}
+	}
+
+	/**
+	 * @method	get_engine_culture
+	 * 
+	 * Get recognition engine culture.
+	 * 
+	 * @returns	{string}		Culture that the recognition engine is using.
+	 */
+	get_engine_culture() 
+	{
+		// Detenemos si no se ha construido el addon
+
+		if( !this._isConstructed ) {
+			console.error( "[voice-recognition]: Addon is not instantiated" )
+			return;
+		}
+
+		return addon.get_engine_culture();
+	}
+
+	/**
+	 * @method	installed_cultures
+	 * 
+	 * Get the cultures installed on the device.
+	 * 
+	 * @returns	{array}			Array with installed cultures.
+	 */
+	installed_cultures()
+	{
+		// Detenemos si no se ha construido el addon
+
+		if( !this._isConstructed ) {
+			console.error( "[voice-recognition]: Addon is not instantiated" )
+			return;
+		}
+
+		let cultures = addon.get_installed_cultures();
+		
+		if( cultures != "" ) {
+			cultures = JSON.parse( cultures );
+		}
+
+		return cultures;
+	}
+
+	/**
+	 * @method	_set_function_emit
+	 * 
+	 * Configure the function to which the addon will return the results.
+	 * 
+	 * @returns	{void}
+	 */
+	_set_function_emit()
+	{
+		if( this._setedFunction ) {
+			return;
+		}
+		
+		// Le enviamos al addon el emiter
+
+		addon.result_function(this._get_result.bind(this));
+		this._setedFunction = true;
+	}
+
+	/**
+	 * @method	get_installed_cultures
+	 * 
+	 * Get the cultures installed on the device when building the addon.
+	 * 
+	 * @returns	{array}					Array with installed cultures.
+	 */
+	static get_installed_cultures()
+	{
+		let cultures = addon.get_installed_cultures();
+		
+		if( cultures != "" ) {
+			cultures = JSON.parse( cultures );
+		}
+
+		return cultures;
+	}
+
 	/**
 	 * @method	_audio_level
 	 * 
