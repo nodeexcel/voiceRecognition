@@ -277,6 +277,54 @@ class VoiceRecognizer extends events {
 	}
 
 	/**
+	 * @method	_get_result
+	 * 
+	 * Method that is called from the addon when the recognition engine returns some
+	 * event.
+	 * 
+	 * @param	{string}	evName		Name of the event to call.
+	 * @param	{string}	result		Recognition engine event result
+	 * @returns	{void}
+	 */
+	_get_result( evName, result )
+	{
+		if( evName == "vc:audioState" ){
+			this._audio_state(result);
+		} else if( evName == "vc:audioLevel" ){
+			this._audio_level(result);
+		} else if( evName == "vc:audioProblem" ){
+			this._audio_problem(result);
+		} else if( evName == "vc:detected" ){
+			this._detected(result);
+		} else if( evName == "vc:recognized" ){
+			this._recognized(result);
+		} else if( evName == "vc:hypothesized" ){
+			this._hypothesized(result);
+		} else if( evName == "vc:rejected" ){
+			this._rejected(result);
+		} else if( evName == "vc:completed" ){
+			this._completed(result);
+		} else if( evName == "vcpr:error" ){
+			this._error_addon(result);
+		}
+	}
+
+	/**
+	 * @method	_audio_state
+	 * 
+	 * Receive the audio status event sent by the recognition.
+	 * 
+	 * @param	{string}	result		Event result in JSON
+	 * @returns	{void}
+	 */
+	_audio_state( result )
+	{
+		let rJSON = JSON.parse( result );
+
+		this.emit("vc:audioState", rJSON.AudioState );
+	}
+
+	/**
 	 * @method	_audio_level
 	 * 
 	 * Receive the audio level event sent by the recognition engine.
