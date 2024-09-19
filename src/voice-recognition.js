@@ -106,6 +106,22 @@ class VoiceRecognizer extends events {
 	 * @param	{string}	file 			Path to the XML file containing the grammar.
 	 * @returns	{void}
 	 */
+	add_grammar_from_xml( file = null, name = "mygrammar" ) 
+	{
+		// Detenemos si no se ha construido el addon
+
+		if( !this._isConstructed ) {
+			console.error( "[voice-recognition]: Addon is not instantiated" )
+			return;
+		}
+
+		if( !file || !fs.existsSync( file ) ) {
+			console.error( "[voice-recognition]: Grammar file does not exists." )
+			return false;
+		}
+		
+		addon.add_grammar_XML( file, name );
+	}
 
 	/**
 	 * @method	_audio_level
